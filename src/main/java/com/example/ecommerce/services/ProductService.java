@@ -1,6 +1,7 @@
 package com.example.ecommerce.services;
 
 import com.example.ecommerce.dtos.*;
+import com.example.ecommerce.exceptions.AlreadyExistsException;
 import com.example.ecommerce.exceptions.ProductNotFoundException;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.Category;
@@ -33,6 +34,11 @@ public class ProductService implements IProductService {
     @Override
     @Transactional
     public Product addProduct(AddProductDto addProductDto) {
+
+        if(productExists(addProductDto.getName(),addProductDto.getBrand())){
+            throw new AlreadyExistsException("this product already exist");
+        }
+
         Category category = categoryRepository.findByName(addProductDto.getCategory().getName())
                 .orElseGet(()->{
                     Category newCategory = new Category(addProductDto.getCategory().getName());
@@ -40,6 +46,10 @@ public class ProductService implements IProductService {
                 });
         addProductDto.setCategory(category);
         return productRepository.save(this.createProduct(addProductDto,category));
+    }
+
+    private boolean productExists(String name,String brand){
+        return productRepository.existsByNameAndBrand(name,brand);
     }
 
     private Product createProduct(AddProductDto addProductDto, Category category){
