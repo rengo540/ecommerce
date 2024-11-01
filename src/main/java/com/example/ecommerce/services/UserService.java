@@ -7,20 +7,30 @@ import com.example.ecommerce.exceptions.AlreadyExistsException;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.User;
 import com.example.ecommerce.repos.UserRepo;
+import com.example.ecommerce.security.UserAppDetails;
 import com.example.ecommerce.services.iservices.IUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserService implements IUserService {
+public class UserService implements IUserService , UserDetailsService {
 
     @Autowired
     private UserRepo userRepo;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public User getUserById(Long userId) {
@@ -35,7 +45,7 @@ public class UserService implements IUserService {
                 .map(us-> {
                     User user =new User();
                     user.setEmail(request.getEmail());
-                    user.setPassword(request.getPassword());
+                    user.setPassword(passwordEncoder.encode(request.getPassword()));
                     user.setFirstName(request.getFirstName());
                     user.setLastName(request.getLastName());
                     return userRepo.save(user);
@@ -62,5 +72,21 @@ public class UserService implements IUserService {
     @Override
     public UserDto convertUserToDto(User user) {
         return modelMapper.map(user, UserDto.class);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserAppDetails userD= (UserAppDetails) authentication.getPrincipal();
+        return userRepo.findByEmail(userD.getEmail())
+                .orElseThrow(()->new UsernameNotFoundException("user not found"));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user =userRepo.findByEmail(email).orElseThrow(
+                ()->new UsernameNotFoundException(" user not found")
+        );
+        return UserAppDetails.buildUserDetails(user);
     }
 }

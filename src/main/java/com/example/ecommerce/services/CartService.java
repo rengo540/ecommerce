@@ -3,6 +3,7 @@ package com.example.ecommerce.services;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.Cart;
 import com.example.ecommerce.models.CartItem;
+import com.example.ecommerce.models.User;
 import com.example.ecommerce.repos.CartItemRepo;
 import com.example.ecommerce.repos.CartRepo;
 import com.example.ecommerce.services.iservices.ICartService;
@@ -52,10 +53,11 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Long intializrCart(){
+    public Long intializrCart(User user){
         Cart cart =new Cart();
         Long cartId = cartIdGenerator.incrementAndGet();
         cart.setId(cartId);
+        cart.setUser(user);
         return cartRepo.save(cart).getId();
     }
 
