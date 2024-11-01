@@ -1,31 +1,16 @@
 package com.example.ecommerce.controllers;
 
-import com.example.ecommerce.AppConfig;
-import com.example.ecommerce.dtos.ImageDto;
-import com.example.ecommerce.exceptions.ProductNotFoundException;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
-import com.example.ecommerce.models.Image;
-import com.example.ecommerce.models.Product;
 import com.example.ecommerce.response.ApiResponse;
 import com.example.ecommerce.services.iservices.IImageService;
-import com.example.ecommerce.services.iservices.IProductService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.sql.SQLException;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;

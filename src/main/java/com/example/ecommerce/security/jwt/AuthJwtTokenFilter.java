@@ -1,6 +1,7 @@
 package com.example.ecommerce.security.jwt;
 
 import com.example.ecommerce.security.UserAppDetails;
+import com.example.ecommerce.security.UserDetailsService;
 import com.example.ecommerce.services.UserService;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -24,7 +25,7 @@ public class AuthJwtTokenFilter extends OncePerRequestFilter {
     private JwtUtils jwtUtils;
     private UserAppDetails userAppDetails;
     @Autowired
-    private UserService userService;
+    private UserDetailsService userService;
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,

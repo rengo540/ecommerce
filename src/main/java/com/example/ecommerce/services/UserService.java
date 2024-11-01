@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class UserService implements IUserService , UserDetailsService {
+public class UserService implements IUserService  {
 
     @Autowired
     private UserRepo userRepo;
@@ -82,11 +82,5 @@ public class UserService implements IUserService , UserDetailsService {
                 .orElseThrow(()->new UsernameNotFoundException("user not found"));
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user =userRepo.findByEmail(email).orElseThrow(
-                ()->new UsernameNotFoundException(" user not found")
-        );
-        return UserAppDetails.buildUserDetails(user);
-    }
+
 }

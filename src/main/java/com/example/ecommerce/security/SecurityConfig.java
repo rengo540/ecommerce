@@ -5,6 +5,7 @@ import com.example.ecommerce.security.jwt.JwtAuthEntryPoint;
 import com.example.ecommerce.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +37,9 @@ public class SecurityConfig {
         return new ModelMapper();
     }
 
-    private final UserService userService;
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     private final JwtAuthEntryPoint authEntryPoint;
 
 
@@ -58,7 +61,7 @@ public class SecurityConfig {
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService);
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }

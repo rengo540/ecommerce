@@ -1,10 +1,10 @@
 package com.example.ecommerce.services;
 
-import com.example.ecommerce.AppConfig;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.Image;
 import com.example.ecommerce.models.Product;
 import com.example.ecommerce.repos.ImageRepo;
+import com.example.ecommerce.security.SecurityConfig;
 import com.example.ecommerce.services.iservices.IImageService;
 import com.example.ecommerce.services.iservices.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class ImageService implements IImageService {
     @Override
     public void deleteImageById(Long id) throws IOException {
          Image image = getImageById(id);
-         Path filePath = Paths.get(AppConfig.UPLOAD_DIR +image.getId().toString()+image.getFileName());
+         Path filePath = Paths.get(SecurityConfig.UPLOAD_DIR +image.getId().toString()+image.getFileName());
          Files.delete(filePath);
          imageRepo.deleteById(id);
     }
@@ -56,7 +56,7 @@ public class ImageService implements IImageService {
         for(MultipartFile file :files){
             String originalFilename = file.getOriginalFilename();
             Image image= saveImage(originalFilename,file.getContentType(),productId);
-            Path filePath = Paths.get(AppConfig.UPLOAD_DIR +image.getId().toString()+originalFilename);
+            Path filePath = Paths.get(SecurityConfig.UPLOAD_DIR +image.getId().toString()+originalFilename);
             image.setImagePath(filePath.toString());
             imageRepo.save(image);
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
