@@ -5,12 +5,15 @@ import com.example.ecommerce.dtos.OneProductDto;
 import com.example.ecommerce.dtos.ProductDto;
 import com.example.ecommerce.dtos.ProductUpdateRequest;
 import com.example.ecommerce.models.Product;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface IProductService {
     Product addProduct(AddProductDto product);
-    List<Product> getAllProducts();
+
+    Page<Product> getAllProducts(int pageNumber, int pageSize, String sortBy);
+
     Product getProductById(Long id);
     void deleteProductById(Long id);
     Product updateProduct(ProductUpdateRequest product, Long productId);

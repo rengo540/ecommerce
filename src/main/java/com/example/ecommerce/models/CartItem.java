@@ -1,6 +1,7 @@
 package com.example.ecommerce.models;
 
 
+import com.example.ecommerce.models.auditing.BaseEntityAuditing;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,10 +16,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class CartItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CartItem extends BaseEntityAuditing {
+
     private int quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;

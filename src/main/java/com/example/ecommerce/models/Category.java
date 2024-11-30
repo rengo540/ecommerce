@@ -1,5 +1,6 @@
 package com.example.ecommerce.models;
 
+import com.example.ecommerce.models.auditing.BaseEntityAuditing;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -16,10 +17,8 @@ import java.util.List;
 @NoArgsConstructor
 
 @Entity
-public class Category {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+public class Category extends BaseEntityAuditing {
+
     private String name ;
 
 

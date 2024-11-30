@@ -1,5 +1,6 @@
 package com.example.ecommerce.models;
 
+import com.example.ecommerce.models.auditing.BaseEntityAuditing;
 import com.example.ecommerce.models.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,10 +17,8 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name = "orders")
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long  id;
+public class Order extends BaseEntityAuditing {
+
     private LocalDate orderDate;
     private BigDecimal totalAmount;
     @Enumerated(EnumType.STRING)

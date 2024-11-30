@@ -1,6 +1,8 @@
 package com.example.ecommerce.models;
 
+import com.example.ecommerce.models.auditing.BaseEntityAuditing;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,12 +19,11 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class User extends BaseEntityAuditing {
+
     private String firstName;
     private String lastName;
+    @Email
     private String email;
     private String password;
 

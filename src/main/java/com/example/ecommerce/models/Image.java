@@ -1,5 +1,6 @@
 package com.example.ecommerce.models;
 
+import com.example.ecommerce.models.auditing.BaseEntityAuditing;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,10 +13,8 @@ import java.sql.Blob;
 @Setter
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "imagePath" }))
-public class Image {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+public class Image extends BaseEntityAuditing {
+
     private  String fileName ;
     private String fileType;
     private String imagePath;

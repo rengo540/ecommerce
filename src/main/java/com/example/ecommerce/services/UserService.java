@@ -5,7 +5,9 @@ import com.example.ecommerce.dtos.UserDto;
 import com.example.ecommerce.dtos.UserUpdateRequest;
 import com.example.ecommerce.exceptions.AlreadyExistsException;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
+import com.example.ecommerce.models.Role;
 import com.example.ecommerce.models.User;
+import com.example.ecommerce.repos.RoleRepo;
 import com.example.ecommerce.repos.UserRepo;
 import com.example.ecommerce.security.UserAppDetails;
 import com.example.ecommerce.services.iservices.IUserService;
@@ -28,6 +30,8 @@ public class UserService implements IUserService  {
     @Autowired
     private UserRepo userRepo;
     @Autowired
+    private RoleRepo roleRepo;
+    @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -40,6 +44,7 @@ public class UserService implements IUserService  {
 
     @Override
     public User createUser(CreateUserRequest request) {
+
         return Optional.of(request)
                 .filter(user->!userRepo.existsByEmail(request.getEmail()))
                 .map(us-> {

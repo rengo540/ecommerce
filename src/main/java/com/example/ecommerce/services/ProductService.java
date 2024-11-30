@@ -5,7 +5,6 @@ import com.example.ecommerce.exceptions.AlreadyExistsException;
 import com.example.ecommerce.exceptions.ProductNotFoundException;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.Category;
-import com.example.ecommerce.models.Image;
 import com.example.ecommerce.models.Product;
 import com.example.ecommerce.repos.CategoryRepository;
 import com.example.ecommerce.repos.ImageRepo;
@@ -14,10 +13,13 @@ import com.example.ecommerce.services.iservices.IProductService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService implements IProductService {
@@ -64,8 +66,9 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Page<Product> getAllProducts(int pageNumber, int pageSize, String sortBy) {
+        Pageable pageable = PageRequest.of(pageNumber,pageSize, Sort.by(Sort.Direction.ASC,sortBy));
+        return productRepository.findAll(pageable);
     }
 
     @Override
@@ -139,9 +142,9 @@ public class ProductService implements IProductService {
     @Override
     public ProductDto convertToDto(Product product) {
         ProductDto productDto = modelMapper.map(product, ProductDto.class);
-        Image image = imageRepository.findFirstByProductId(product.getId());
-        ImageDto imageDto =modelMapper.map(image, ImageDto.class);
-        productDto.setImage(imageDto);
+//        Image image = imageRepository.findFirstByProductId(product.getId());
+//        ImageDto imageDto =modelMapper.map(image, ImageDto.class);
+//        productDto.setImage(imageDto);
         return productDto;
     }
 

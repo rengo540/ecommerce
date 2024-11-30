@@ -66,6 +66,7 @@ public class SecurityConfig {
         return authProvider;
     }
 
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint))

@@ -1,5 +1,6 @@
 package com.example.ecommerce.models;
 
+import com.example.ecommerce.models.auditing.BaseEntityAuditing;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,10 +11,8 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-public class OrderItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class OrderItem extends BaseEntityAuditing {
+
     private  int quantity;
     private BigDecimal price;
 

@@ -8,15 +8,16 @@ import com.example.ecommerce.dtos.ProductUpdateRequest;
 import com.example.ecommerce.exceptions.ProductNotFoundException;
 import com.example.ecommerce.exceptions.ResourceNotFoundException;
 import com.example.ecommerce.models.Product;
+import com.example.ecommerce.response.ApiPagiableResponse;
 import com.example.ecommerce.response.ApiResponse;
 import com.example.ecommerce.services.iservices.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -30,14 +31,22 @@ public class ProductController {
     private IProductService productService;
 
     @GetMapping()
-    public ResponseEntity<ApiResponse> getAllProducts(){
+    public ResponseEntity<ApiPagiableResponse> getAllProducts(@RequestParam(defaultValue = "0") int page,
+                                                              @RequestParam(defaultValue = "10") int size,
+                                                              @RequestParam(defaultValue = "name") String sortBy){
         try{
-            List<Product> products = productService.getAllProducts();
-            List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
-            return  ResponseEntity.ok(new ApiResponse("success", convertedProducts));
+            Page<Product> products = productService.getAllProducts(page, size, sortBy);
+            List<ProductDto> convertedProducts = productService.getConvertedProducts(products.getContent());
+            HashMap<String ,String> payload = new HashMap<>();
+            payload.put("pageNumber", String.valueOf(products.getNumber()));
+            payload.put("noOfPages", String.valueOf(products.getTotalPages()));
+            payload.put("hasNext",String.valueOf(products.hasNext()));
+
+
+            return  ResponseEntity.ok(new ApiPagiableResponse("success",convertedProducts,payload));
 
         }catch (Exception e){
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse("error", INTERNAL_SERVER_ERROR));
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiPagiableResponse( e.getMessage() , INTERNAL_SERVER_ERROR,null));
         }
     }
 

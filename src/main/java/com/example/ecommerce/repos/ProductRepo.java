@@ -1,11 +1,20 @@
 package com.example.ecommerce.repos;
 
 import com.example.ecommerce.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepo extends JpaRepository<Product,Long> {
+
+    @Override
+    @EntityGraph(attributePaths = {"category"})
+    Page<Product> findAll(Pageable pageable);
+
     List<Product> findByCategoryName(String category);
 
     List<Product> findByBrand(String brand);
