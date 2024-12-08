@@ -31,9 +31,6 @@ public class ImageController {
             return ResponseEntity.ok().body(new ApiResponse("successfully added",1));
         }catch (IOException e){
             return ResponseEntity.status(BAD_REQUEST).body(new ApiResponse(e.getMessage(),BAD_REQUEST));
-        }catch (ResourceNotFoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse("the product not found",NOT_FOUND));
-
         }
 
     }
@@ -43,8 +40,6 @@ public class ImageController {
         try {
             imageService.deleteImageById(imageId);
             return ResponseEntity.ok(new ApiResponse("deleted successfully", null));
-        }catch (ResourceNotFoundException e){
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
         }
         catch (Exception e){
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(),INTERNAL_SERVER_ERROR));

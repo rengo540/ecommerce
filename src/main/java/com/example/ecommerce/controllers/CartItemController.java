@@ -29,7 +29,7 @@ public class CartItemController {
     public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId,
                                                      @RequestParam Long productId,
                                                     @RequestParam Integer quantity){
-        try {
+
             Long cart_id=-1L;
          if(cartId==null){
              User user = userService.getAuthenticatedUser();
@@ -39,23 +39,15 @@ public class CartItemController {
 
             cartItemService.addItemToCart(cartId,productId,quantity);
             return ResponseEntity.ok(new ApiResponse("cartId",cart_id));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
-        }catch(JwtException e){
-            return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(),null));
-        }
 
     }
 
     @DeleteMapping("/cart/{cartId}/item/{itemId}/remove")
     public ResponseEntity<ApiResponse> removeItemFromCart(@PathVariable Long cartId,
                                                           @PathVariable Long productId){
-        try {
+
             cartItemService.removeItemFromCart(cartId,productId);
             return ResponseEntity.ok(new ApiResponse("remove item success",null));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
-        }
 
     }
 
@@ -63,12 +55,9 @@ public class CartItemController {
     public ResponseEntity<ApiResponse> updateItemQuantity(@PathVariable Long cartId,
                                                           @PathVariable Long productId,
                                                           @RequestParam Integer newQuantity){
-        try {
+
             cartItemService.updateItemQuantity(cartId,productId,newQuantity);
             return ResponseEntity.ok(new ApiResponse("update item quantity success",null));
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(),null));
-        }
 
     }
 }
